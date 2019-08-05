@@ -6,13 +6,12 @@ Two scenarios are included:
 * __Read and display content__
 * __Read and display a 'Story'__
 
-# Hosted Rndpoints
+# Hosted Endpoints
 The two 'frontends' (mag-pages.html and mag-story.html) hit the hosted Magnolia demo at https://demopublic.magnolia-cms.com by default for their content.
 
 You can try them by simply opening the files in a browser.
 
 The `light-modules` directory is only used if you run the demo against a local Magnolia server. See the bottom of the README for how to do this.
-
 
 
 # Read and display content:
@@ -63,7 +62,12 @@ By installing in this location, the Magnoila server will automatically load the 
 
 * Start the Magnolia server with `mgnl start`.
 
-* Log into the Author and Public instance, you will need to do that on both servers because you will need to provide your enterprise credentials.
+* Log into the Author and Public instance, you will need to do that on both servers because you will need to provide your enterprise license key to enable the servers.
+
+# Resources
+
+Getting Started with REST in Magnolia
+https://documentation.magnolia-cms.com/display/DOCS61/Getting+started+with+REST
 
 # License
 
