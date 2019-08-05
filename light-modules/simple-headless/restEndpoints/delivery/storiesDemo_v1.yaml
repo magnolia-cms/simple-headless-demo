@@ -1,0 +1,35 @@
+class: info.magnolia.rest.delivery.jcr.v2.JcrDeliveryEndpointDefinition
+depth: 1
+nodeTypes:
+- mgnl:composition
+childNodeTypes:
+- mgnl:block
+limit: 100
+workspace: stories
+bypassWorkspaceAcls: true
+
+references:
+  - name: tours
+    propertyName: tours
+    referenceResolver:
+      class: info.magnolia.rest.reference.jcr.JcrReferenceResolverDefinition
+      targetWorkspace: tours
+  - name: tour
+    propertyName: tour
+    referenceResolver:
+      class: info.magnolia.rest.reference.jcr.JcrReferenceResolverDefinition
+      targetWorkspace: tours
+  - name: stories
+    propertyName: stories
+    referenceResolver:
+      class: info.magnolia.rest.reference.jcr.JcrReferenceResolverDefinition
+      targetWorkspace: stories
+
+  - name: imageReference
+    propertyName: image
+    referenceResolver:
+      class: info.magnolia.rest.reference.dam.AssetReferenceResolverDefinition
+      assetRenditions:
+        - "240"
+        - "960"
+        - "1600"

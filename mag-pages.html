@@ -2,10 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
+
   <script>
 
+const RUN_ON_HOSTED_DEMO = true;
+
+var URL = '';
+
+if (RUN_ON_HOSTED_DEMO){
+  URL = "https://demopublic.magnolia-cms.com/.rest/delivery/pagesWithComponents/v1/about/"
+}else{
+  //Run on local demo - you must install and start a local Magnolia server.
+  URL = "http://localhost:8080/magnoliaPublic/.rest/delivery/pagesDemo/v1/about"
+}
+
 function listPageAreas(){
-  const URL = "https://demopublic.magnolia-cms.com/.rest/delivery/pagesWithComponents/v1/about/"
+
   fetch(URL)
   .then(function(response) {
     return response.json();

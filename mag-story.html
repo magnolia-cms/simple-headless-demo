@@ -2,38 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
+
   <script>
 
-function listPageAreas(){
-  const URL = "https://demopublic.magnolia-cms.com/.rest/delivery/stories/v1/stories-demo/flavors-of-asia"
+const RUN_ON_HOSTED_DEMO = false;
+
+var URL = '';
+var URL_DAM_BASE = '';
+
+if (RUN_ON_HOSTED_DEMO){
+  URL = "https://demopublic.magnolia-cms.com/.rest/delivery/stories/v1/stories-demo/flavors-of-asia"
+  URL_DAM_BASE = "https://demopublic.magnolia-cms.com"
+}else{
+  //Run on local demo - you must install and start a local Magnolia server.
+  URL = "http://localhost:8080/magnoliaPublic/.rest/delivery/storiesDemo/v1/stories-demo/flavors-of-asia"
+  URL_DAM_BASE = "http://localhost:8080"
+}
+
+
+function loadAndRender(){
+
   fetch(URL)
   .then(function(response) {
+
     return response.json();
   })
   .then(function(myJson) {
     //console.log(myJson);
+
     var html = "";
+
+    if (RUN_ON_HOSTED_DEMO){
+      html += "<b><i>Running on Hosted Demo. Images probably won't be displayed because hosted endpoint does not have 'renditions' configured.</i></b>"
+    }
+
+    html += renderIntro(myJson);
 
     var nodes = myJson['@nodes'];
 
     for (let node_ref of nodes){
+      // Derefernce the block based on the @nodes array.
       var block = myJson[node_ref];
 
-      var type = block['mgnl:type'];
+      // Only render nodes of type block.
+      if (block['@nodeType'] === "mgnl:block"){
+        var type = block['mgnl:type'];
 
-      if (type == 'text'){
-        html += buildText(block);
-      } else if (type === 'image'){
-        html += buildImage(block);
-      }else  if (type === 'date'){
-        html += buildDate(block);
+        html += "<h2>" + type + "</h2>";
+
+        if (type == 'text'){
+          html += renderText(block);
+        } else if (type === 'image'){
+          html += renderImage(block);
+        }else  if (type === 'date'){
+          html += renderDate(block);
+        }
+
+        html += "<hr/>";
       }
 
-      html += "<hr/>";
 
-      //html += subnode['@path'] + '<br>';
-
-      //console.log(subnode['@path']);
     }
 
     var element = document.getElementById("dynamic-content");
@@ -42,36 +70,53 @@ function listPageAreas(){
   });
 }
 
-function buildText(block){
+function renderIntro(content){
+  return `<h1>${content.title}</h1>
+
+          <div>
+            <p>${content.lead}</p>
+          </div>
+          <div>
+            <p>by ${content.author}</p>
+          </div>
+          `
+}
+
+function renderText(block){
   return `<div>
-            <h3>Text</h3>
             <p>${block.text}</p>
           </div>`
 }
 
-function buildImage(block){
+function renderImage(block){
+  const image_url = block.image.renditions ? URL_DAM_BASE + block.image.renditions['240'].link : '';
   return `<div>
-            <h3>Image</h3>
-            <img src="${block.image}"></p>
+            <img src="${image_url}"></img>
+            <p>${block.imageAltText}</p>
           </div>`
 }
 
-function buildDate(block){
-  return "<div>date</div>"
+function renderDate(block){
+  var d = new Date(block.date)
+  return `<div>
+            <p>${d}</p>
+          </div>`
 }
 
 
   </script>
 </head>
+
 <body>
 
-<h1>Dynamic Content</h1>
-<div id="dynamic-content">
-</div>
+  <h1>A Magnolia Story</h1>
 
-<script>
-  listPageAreas();
-</script>
+  <div id="dynamic-content">
+  </div>
+
+  <script>
+    loadAndRender();
+  </script>
 </body>
 
 </html>
