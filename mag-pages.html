@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <script>
+
+function listPageAreas(){
+  const URL = "https://demopublic.magnolia-cms.com/.rest/delivery/pagesWithComponents/v1/about/"
+  fetch(URL)
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    //console.log(myJson);
+    var html = "";
+
+    var nodes = myJson['@nodes'];
+
+    for (let node_ref of nodes){
+      var subnode = myJson[node_ref];
+      html += subnode['@path'] + '<br>';
+
+      console.log(subnode['@path']);
+    }
+    var element = document.getElementById("page-list");
+    element.innerHTML = html;
+
+  });
+}
+
+
+  </script>
+</head>
+<body>
+
+<h1>Page List</h1>
+<div id="page-list">
+</div>
+
+<script>
+  listPageAreas();
+</script>
+</body>
+
+</html>

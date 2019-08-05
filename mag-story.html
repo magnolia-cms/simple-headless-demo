@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <script>
+
+function listPageAreas(){
+  const URL = "https://demopublic.magnolia-cms.com/.rest/delivery/stories/v1/stories-demo/flavors-of-asia"
+  fetch(URL)
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    //console.log(myJson);
+    var html = "";
+
+    var nodes = myJson['@nodes'];
+
+    for (let node_ref of nodes){
+      var block = myJson[node_ref];
+
+      var type = block['mgnl:type'];
+
+      if (type == 'text'){
+        html += buildText(block);
+      } else if (type === 'image'){
+        html += buildImage(block);
+      }else  if (type === 'date'){
+        html += buildDate(block);
+      }
+
+      html += "<hr/>";
+
+      //html += subnode['@path'] + '<br>';
+
+      //console.log(subnode['@path']);
+    }
+
+    var element = document.getElementById("dynamic-content");
+    element.innerHTML = html;
+
+  });
+}
+
+function buildText(block){
+  return `<div>
+            <h3>Text</h3>
+            <p>${block.text}</p>
+          </div>`
+}
+
+function buildImage(block){
+  return `<div>
+            <h3>Image</h3>
+            <img src="${block.image}"></p>
+          </div>`
+}
+
+function buildDate(block){
+  return "<div>date</div>"
+}
+
+
+  </script>
+</head>
+<body>
+
+<h1>Dynamic Content</h1>
+<div id="dynamic-content">
+</div>
+
+<script>
+  listPageAreas();
+</script>
+</body>
+
+</html>
